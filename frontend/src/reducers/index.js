@@ -6,6 +6,7 @@ import {
 
     // Post actions
     LIST_POSTS,
+    GET_POST,
     ADD_POST,
     DELETE_POST,
     EDIT_POST,
@@ -41,6 +42,10 @@ const post = (state = initialState, action) => {
             return Object.assign({}, state, {
                 posts: action.posts,
             })
+        case GET_POST:
+            return Object.assign({}, state, {
+                selectedPost: action.post,
+            })
         case ADD_POST:
             return [
                 ...state,
@@ -73,6 +78,7 @@ const post = (state = initialState, action) => {
                     ? { ...post, voteScore: action.vote === 'upVote' ? post.voteScore + 1 : post.voteScore - 1 }
                     : post
             )
+            state.selectedPost = { ...state.selectedPost, voteScore: action.vote === 'upVote' ? state.selectedPost.voteScore + 1 : state.selectedPost.voteScore - 1 }
             return state
         default:
             return state

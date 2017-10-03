@@ -5,6 +5,7 @@ export const LIST_CATEGORIES = 'LIST_CATEGORIES'
 
 // Post Actions
 export const LIST_POSTS = 'LIST_POSTS'
+export const GET_POST = 'GET_POST'
 export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
 export const EDIT_POST = 'EDIT_POST'
@@ -89,6 +90,17 @@ export const fetchComments = (postId) => dispatch => (
     ReadableAPI
         .getPostComments(postId)
         .then(comments => dispatch(listComments(comments)))
+)
+
+export const getPost = post => ({
+    type: GET_POST,
+    post
+})
+
+export const fetchPost = (postId) => dispatch => (
+    ReadableAPI
+        .getPost(postId)
+        .then(post => dispatch(getPost(post)))
 )
 
 export const addComment = (parentId, body, author) => {
