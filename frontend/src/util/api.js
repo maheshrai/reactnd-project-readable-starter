@@ -25,7 +25,6 @@ export const getPosts = (category) =>
 export const getAllPosts = () =>
     fetch(`${api}/posts`, { headers })
         .then(res => res.json())
-        .then(data => data)
 
 export const addPost = (post) =>
     fetch(`${api}/posts`, {
@@ -45,9 +44,8 @@ export const updatePostVote = (postId, vote) =>
             ...headers,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ vote })
+        body: JSON.stringify({ id: postId, option: vote })
     }).then(res => res.json())
-        .then(data => data.post)
 
 
 export const updatePost = (postId, title, body) =>
@@ -59,3 +57,7 @@ export const updatePost = (postId, title, body) =>
         },
         body: JSON.stringify({ title, body })
     }).then(res => res.json())
+
+export const getPostComments = (postId) => 
+    fetch(`${api}/posts/${postId}/comments`, { headers })
+        .then(res => res.json())

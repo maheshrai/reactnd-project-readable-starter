@@ -11,6 +11,7 @@ export const EDIT_POST = 'EDIT_POST'
 export const VOTE_POST = 'VOTE_POST'
 
 // Comment Actions
+export const LIST_COMMENTS = 'LIST_COMMENTS'
 export const ADD_COMMENT = 'ADD_COMMENT'
 export const DELETE_COMMENT = 'DELETE_COMMENT'
 export const EDIT_COMMENT = 'EDIT_COMMENT'
@@ -72,6 +73,23 @@ export const votePost = (id, vote) => {
         vote
     }
 }
+
+export const updatePostVote = (id, vote) => dispatch => (
+    ReadableAPI
+        .updatePostVote(id, vote)
+        .then(dispatch(votePost(id, vote)))
+)
+
+export const listComments = comments => ({
+    type: LIST_COMMENTS,
+    comments
+})
+
+export const fetchComments = (postId) => dispatch => (
+    ReadableAPI
+        .getPostComments(postId)
+        .then(comments => dispatch(listComments(comments)))
+)
 
 export const addComment = (parentId, body, author) => {
     return {

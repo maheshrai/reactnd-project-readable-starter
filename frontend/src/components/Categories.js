@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { NavLink } from 'react-router-dom'
 
 class Categories extends Component {
 
@@ -16,7 +17,10 @@ class Categories extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.categories.map((category, i) => <tr key={i}><td>{category.name}</td></tr>)}
+                    {this.props.categories.map((category, i) =>
+                        <tr key={i}><td>
+                            <NavLink to={'/' + category.name}>{category.name}</NavLink>
+                        </td></tr>)}
                 </tbody>
             </table>
         )

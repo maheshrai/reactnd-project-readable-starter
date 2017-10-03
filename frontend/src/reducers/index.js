@@ -12,6 +12,7 @@ import {
     VOTE_POST,
 
     // Comment actions
+    LIST_COMMENTS,
     ADD_COMMENT,
     DELETE_COMMENT,
     EDIT_COMMENT,
@@ -67,11 +68,12 @@ const post = (state = initialState, action) => {
                     : post
             )
         case VOTE_POST:
-            return state.map(post =>
+            state.posts = state.posts.map(post =>
                 (post.id === action.id)
-                    ? { ...post, voteScore: action.vote === 'upvote' ? post.voteScore + 1 : post.voteScore - 1 }
+                    ? { ...post, voteScore: action.vote === 'upVote' ? post.voteScore + 1 : post.voteScore - 1 }
                     : post
             )
+            return state
         default:
             return state
     }
@@ -79,6 +81,10 @@ const post = (state = initialState, action) => {
 
 const comment = (state = {}, action) => {
     switch (action.type) {
+        case LIST_COMMENTS:
+            return Object.assign({}, state, {
+                comments: action.comments,
+            })
         case ADD_COMMENT:
             return [
                 ...state,

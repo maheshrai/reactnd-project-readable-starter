@@ -20,9 +20,7 @@ const store = createStore(
         applyMiddleware(logger, thunk))
 )
 
-
 store.dispatch(fetchPosts())
-
 store.dispatch(fetchCategories())
 
 ReactDOM.render(

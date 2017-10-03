@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import voteup from '../voteup.svg';
+import votedown from '../votedown.svg';
+import { NavLink } from 'react-router-dom'
 
 class Posts extends Component {
 
     static propTypes = {
         posts: PropTypes.array.isRequired,
-        category: PropTypes.string.isRequired
+        category: PropTypes.string.isRequired,
+        onVote: PropTypes.func.isRequired
     }
 
     render() {
@@ -18,15 +22,26 @@ class Posts extends Component {
                         <th>Author</th>
                         <th>Category</th>
                         <th>Vote Score</th>
+                        <th>Vote</th>
                     </tr>
                 </thead>
                 <tbody>
                     {this.findPostsByCategory().map((post, i) => <tr key={i}>
-                        <td>{post.title}</td>
+                        <td><NavLink to={'/' + post.category + '/' + post.id}>{post.title}</NavLink></td>
                         <td>{post.body}</td>
                         <td>{post.author}</td>
                         <td>{post.category}</td>
                         <td>{post.voteScore}</td>
+                        <td>
+                            <button onClick={e => {
+                                e.preventDefault()
+                                this.props.onVote(post.id, 'upVote')
+                            }}><img src={voteup} height="20" width="20" alt="Click to like the Post" /></button>&nbsp;&nbsp;
+                            <button onClick={e => {
+                                e.preventDefault()
+                                this.props.onVote(post.id, 'downVote')
+                            }}><img src={votedown} height="20" width="20" alt="Click if dislike the Post" /></button>
+                        </td>
                     </tr>)}
                 </tbody>
             </table>
