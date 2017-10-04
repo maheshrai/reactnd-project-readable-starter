@@ -14,6 +14,15 @@ class Comments extends Component {
         return (
             <div>
                 <h3>Comments: {this.props.comments.length}</h3>
+                <form>
+                    <label>Comment:
+                    <textarea rows="2" cols="50" id="comment" name="comment" placeholder="Comments" />
+                    </label>
+                    <label>Author:
+                    <input type="text" id="comment_author" name="comment_author" placeholder="Author" />
+                    </label>
+                    <input type="button" value="Add Comment" />
+                </form>
                 {this.props.comments.map((comment, i) => <div><br /><div key={comment.id} className="rcorners">
                     <button onClick={e => {
                         e.preventDefault()

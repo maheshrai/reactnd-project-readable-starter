@@ -26,7 +26,7 @@ class App extends Component {
           <div>
             <h3>Post</h3>
             <ViewPost
-              id={match.params.post_id}/>
+              id={match.params.post_id} />
           </div>
         )} />
         <Route exact path='/' render={() => (
@@ -59,5 +59,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 export default connect(
-  mapStateToProps, mapDispatchToProps
+  mapStateToProps, mapDispatchToProps, null, {
+    pure: false
+  }
 )(App)

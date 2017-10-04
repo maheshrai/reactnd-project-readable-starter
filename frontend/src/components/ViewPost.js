@@ -46,7 +46,6 @@ class ViewPost extends Component {
                     </label>
                     <input type="button" value="Save" />
                     <input type="button" value="Delete" />
-                    <input type="button" value="Add Comment" />
                 </form>
                 <Comments comments={this.props.comments} onCommentVote={this.props.onCommentVote} />
             </div>
@@ -75,5 +74,7 @@ const mapDispatchToProps = dispatch => ({
 })
 
 export default connect(
-    mapStateToProps, mapDispatchToProps
+    mapStateToProps, mapDispatchToProps, null, {
+        pure: false
+    }
 )(ViewPost)
