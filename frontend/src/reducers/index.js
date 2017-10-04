@@ -22,10 +22,7 @@ import {
 
 const uuidv4 = require('uuid/v4')
 
-const initialState = {
-}
-
-const category = (state = initialState, action) => {
+const category = (state = {}, action) => {
     switch (action.type) {
         case LIST_CATEGORIES:
             return Object.assign({}, state, {
@@ -36,15 +33,16 @@ const category = (state = initialState, action) => {
     }
 }
 
-const post = (state = initialState, action) => {
+const post = (state = {}, action) => {
     switch (action.type) {
         case LIST_POSTS:
             return Object.assign({}, state, {
                 posts: action.posts,
+                selectedIndex: -1
             })
         case GET_POST:
             return Object.assign({}, state, {
-                selectedPost: action.post,
+                selectedIndex: state.posts.findIndex(p => p.id === action.postId)
             })
         case ADD_POST:
             return [
@@ -73,13 +71,16 @@ const post = (state = initialState, action) => {
                     : post
             )
         case VOTE_POST:
-            state.posts = state.posts.map(post =>
-                (post.id === action.id)
-                    ? { ...post, voteScore: action.vote === 'upVote' ? post.voteScore + 1 : post.voteScore - 1 }
-                    : post
-            )
-            state.selectedPost = { ...state.selectedPost, voteScore: action.vote === 'upVote' ? state.selectedPost.voteScore + 1 : state.selectedPost.voteScore - 1 }
-            return state
+            return Object.assign({}, state, {
+                posts: state.posts.map((post) => {
+                    if (post.id === action.id) {
+                        return Object.assign({}, post, {
+                            voteScore: action.vote === 'upVote' ? post.voteScore + 1 : post.voteScore - 1
+                        })
+                    }
+                    return post
+                })
+            })
         default:
             return state
     }
@@ -118,11 +119,16 @@ const comment = (state = {}, action) => {
                     : comment
             )
         case VOTE_COMMENT:
-            return state.map(comment =>
-                (comment.id === action.id)
-                    ? { ...comment, voteScore: action.vote === 'upvote' ? comment.voteScore + 1 : comment.voteScore - 1 }
-                    : comment
-            )
+            return Object.assign({}, state, {
+                comments: state.comments.map((comment) => {
+                    if (comment.id === action.id) {
+                        return Object.assign({}, comment, {
+                            voteScore: action.vote === 'upVote' ? comment.voteScore + 1 : comment.voteScore - 1
+                        })
+                    }
+                    return comment
+                })
+            })
         default:
             return state
     }

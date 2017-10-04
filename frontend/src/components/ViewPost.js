@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import voteup from '../voteup.svg'
 import votedown from '../votedown.svg'
 import { connect } from 'react-redux'
-import { updatePostVote, fetchComments, fetchPost } from '../actions'
+import { updatePostVote, fetchComments, fetchPost, updateCommentVote } from '../actions'
 import Comments from './Comments'
 
 class ViewPost extends Component {
@@ -25,43 +25,46 @@ class ViewPost extends Component {
             <div>
                 <button onClick={e => {
                     e.preventDefault()
-                    this.props.onVote(this.props.id, 'upVote')
+                    this.props.onPostVote(this.props.id, 'upVote')
                 }}><img src={voteup} height="20" width="20" alt="Click to like the Post" /></button>&nbsp;&nbsp;
                 <button onClick={e => {
                     e.preventDefault()
-                    this.props.onVote(this.props.id, 'downVote')
+                    this.props.onPostVote(this.props.id, 'downVote')
                 }}><img src={votedown} height="20" width="20" alt="Click if dislike the Post" /></button>
                 <form>
                     <label>Title:
                     <input type="text" id="title" name="title" placeholder="Title" value={this.props.post ? this.props.post.title : ''} />
                     </label>
                     <label>Body:
-                    <textarea rows="4" cols="50" id="body" name="body" placeholder="Body" value={this.props.post ? this.props.post.body : ''}/>
+                    <textarea rows="4" cols="50" id="body" name="body" placeholder="Body" value={this.props.post ? this.props.post.body : ''} />
                     </label>
                     <label>Author:
-                    <input type="text" id="author" name="author" placeholder="Author" value={this.props.post ? this.props.post.author : ''}/>
+                    <input type="text" id="author" name="author" placeholder="Author" value={this.props.post ? this.props.post.author : ''} />
                     </label>
                     <label>Vote Score:
-                    <input type="text" id="voteScore" name="voteScore" readOnly value={this.props.post ? this.props.post.voteScore : ''}/>
+                    <input type="text" id="voteScore" name="voteScore" readOnly value={this.props.post ? this.props.post.voteScore : ''} />
                     </label>
                     <input type="button" value="Save" />
                     <input type="button" value="Delete" />
                     <input type="button" value="Add Comment" />
                 </form>
-                <Comments comments={this.props.comments} />
+                <Comments comments={this.props.comments} onCommentVote={this.props.onCommentVote} />
             </div>
         )
     }
 }
 
 const mapStateToProps = (state) => ({
-    post: state.post.selectedPost,
+    post: state.post.posts ? state.post.posts[state.post.selectedIndex] : {},
     comments: state.comment.comments ? state.comment.comments : []
 })
 
 const mapDispatchToProps = dispatch => ({
-    onVote: (id, vote) => {
-        dispatch(updatePostVote(id, vote))
+    onPostVote: (postId, vote) => {
+        dispatch(updatePostVote(postId, vote))
+    },
+    onCommentVote: (commentId, vote) => {
+        dispatch(updateCommentVote(commentId, vote))
     },
     loadPost: id => {
         dispatch(fetchPost(id))

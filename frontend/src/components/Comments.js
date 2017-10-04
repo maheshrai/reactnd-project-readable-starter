@@ -6,7 +6,8 @@ import votedown from '../votedown.svg'
 class Comments extends Component {
 
     static propTypes = {
-        comments: PropTypes.array.isRequired
+        comments: PropTypes.array.isRequired,
+        onCommentVote: PropTypes.func.isRequired
     }
 
     render() {
@@ -14,8 +15,14 @@ class Comments extends Component {
             <div>
                 <h3>Comments: {this.props.comments.length}</h3>
                 {this.props.comments.map((comment, i) => <div><br /><div key={comment.id} className="rcorners">
-                    <button><img src={voteup} height="20" width="20" alt="Click to like the Comment" /></button>&nbsp;&nbsp;
-                    <button><img src={votedown} height="20" width="20" alt="Click to dislike the Comment" /></button>
+                    <button onClick={e => {
+                        e.preventDefault()
+                        this.props.onCommentVote(comment.id, 'upVote')
+                    }}><img src={voteup} height="20" width="20" alt="Click to like the Comment" /></button>&nbsp;&nbsp;
+                    <button onClick={e => {
+                        e.preventDefault()
+                        this.props.onCommentVote(comment.id, 'downVote')
+                    }}><img src={votedown} height="20" width="20" alt="Click to dislike the Comment" /></button>
                     <br />
                     <span>{comment.body}</span>
                     <br />

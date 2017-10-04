@@ -92,15 +92,15 @@ export const fetchComments = (postId) => dispatch => (
         .then(comments => dispatch(listComments(comments)))
 )
 
-export const getPost = post => ({
+export const getPost = postId => ({
     type: GET_POST,
-    post
+    postId
 })
 
 export const fetchPost = (postId) => dispatch => (
     ReadableAPI
         .getPost(postId)
-        .then(post => dispatch(getPost(post)))
+        .then(post => dispatch(getPost(post.id)))
 )
 
 export const addComment = (parentId, body, author) => {
@@ -136,4 +136,10 @@ export const voteComment = (id, vote) => {
         vote
     }
 }
+
+export const updateCommentVote = (commentId, vote) => dispatch => (
+    ReadableAPI
+        .updateCommentVote(commentId, vote)
+        .then(dispatch(voteComment(commentId, vote)))
+)
 

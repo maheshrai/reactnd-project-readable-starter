@@ -12,6 +12,11 @@ class Posts extends Component {
         onVote: PropTypes.func.isRequired
     }
 
+    componentWillUpdate(nextProps, nextState) {
+        console.log('nextProps', nextProps)
+        console.log('nextState', nextState)
+      }
+
     render() {
         return (
             <table>
