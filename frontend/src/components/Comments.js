@@ -23,7 +23,7 @@ class Comments extends Component {
                     </label>
                     <input type="button" value="Add Comment" />
                 </form>
-                {this.props.comments.map((comment, i) => <div><br /><div key={comment.id} className="rcorners">
+                {this.props.comments.map((comment, i) => <div key={comment.id} className="rcorners">
                     <button onClick={e => {
                         e.preventDefault()
                         this.props.onCommentVote(comment.id, 'upVote')
@@ -38,7 +38,7 @@ class Comments extends Component {
                     <span>Author: {comment.author}</span>
                     <br />
                     <span>Vote Count: {comment.voteScore}</span>
-                </div></div>
+                </div>
                 )}
             </div>
         )

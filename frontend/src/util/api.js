@@ -37,9 +37,15 @@ export const addPost = (post) =>
             ...headers,
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ post })
+        body: JSON.stringify({
+            id: post.id,
+            title: post.title,
+            body: post.body,
+            timestamp: post.timestamp,
+            author: post.author,
+            category: post.category
+        })
     }).then(res => res.json())
-        .then(data => data.post)
 
 export const updatePostVote = (postId, vote) =>
     fetch(`${api}/posts/${postId}`, {
@@ -60,6 +66,12 @@ export const updatePost = (postId, title, body) =>
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({ title, body })
+    }).then(res => res.json())
+
+export const deletePost = (postId) =>
+    fetch(`${api}/posts/${postId}`, {
+        method: 'DELETE',
+        headers: headers
     }).then(res => res.json())
 
 export const getPostComments = (postId) =>

@@ -40,32 +40,44 @@ export const fetchPosts = () => dispatch => (
         .then(posts => dispatch(listPosts(posts)))
 )
 
-export const addPost = (category, title, body, author) => {
+export const addPost = (post) => {
     return {
         type: ADD_POST,
-        category,
-        title,
-        body,
-        author
+        post
     }
 }
 
-export const editPost = (id, title, body, author) => {
+export const addNewPost = (post) => dispatch => (
+    ReadableAPI
+        .addPost(post)
+        .then(p => dispatch(addPost(p)))
+)
+
+export const editPost = (post) => {
     return {
         type: EDIT_POST,
-        id,
-        title,
-        body,
-        author
+        post
     }
 }
 
-export const deletePost = (id) => {
+export const updatePost = (id, title, body) => dispatch => (
+    ReadableAPI
+        .updatePost(id, title, body)
+        .then(p => dispatch(editPost(p)))
+)
+
+export const deletePost = (post) => {
     return {
         type: DELETE_POST,
-        id
+        post
     }
 }
+
+export const delPost = (id) => dispatch => (
+    ReadableAPI
+        .deletePost(id)
+        .then(p => dispatch(deletePost(p)))
+)
 
 export const votePost = (id, vote) => {
     return {

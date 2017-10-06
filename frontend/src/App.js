@@ -3,10 +3,12 @@ import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import Categories from './components/Categories'
 import Posts from './components/Posts'
-import ViewPost from './components/ViewPost'
+import Post from './components/Post'
 import './App.css';
 
-import { updatePostVote, fetchComments } from './actions'
+import { updatePostVote, fetchComments, delPost } from './actions'
+
+import FaArrowLeft from 'react-icons/lib/fa/arrow-left';
 
 class App extends Component {
 
@@ -18,15 +20,16 @@ class App extends Component {
         </div>
         <Route exact path="/:category" render={({ history, match }) => (
           <div>
+            <h1><FaArrowLeft /></h1>
             <h3>Posts</h3>
             <Posts posts={this.props.posts} category={match.params.category} onVote={this.props.onVote} />
           </div>
         )} />
         <Route exact path="/:category/:post_id" render={({ history, match }) => (
           <div>
-            <h3>Post</h3>
-            <ViewPost
-              id={match.params.post_id} />
+            <Post id={match.params.post_id}
+              category={match.params.category}
+              onDeletePost={this.props.onDeletePost} />
           </div>
         )} />
         <Route exact path='/' render={() => (
@@ -34,7 +37,7 @@ class App extends Component {
             <h3>Categories</h3>
             <Categories categories={this.props.categories} />
             <h3>Posts</h3>
-            <Posts posts={this.props.posts} onVote={this.props.onVote} category='' />
+            <Posts posts={this.props.posts} onVote={this.props.onVote} onDeletePost={this.props.onDeletePost} category='' />
           </div>
         )} />
       </div>
@@ -54,6 +57,9 @@ const mapDispatchToProps = dispatch => {
     },
     loadPostComments: id => {
       dispatch(fetchComments(id))
+    },
+    onDeletePost: id => {
+      dispatch(delPost(id))
     }
   }
 }

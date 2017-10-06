@@ -45,31 +45,24 @@ const post = (state = {}, action) => {
                 selectedIndex: state.posts.findIndex(p => p.id === action.postId)
             })
         case ADD_POST:
-            return [
-                ...state,
-                {
-                    id: uuidv4(),
-                    timestamp: Date.now(),
-                    title: action.title,
-                    body: action.body,
-                    author: action.author,
-                    category: action.category,
-                    voteScore: 1,
-                    deleted: false
-                }
-            ]
+            return Object.assign({}, state, {
+                posts: [...state.posts, action.post]
+            })
         case DELETE_POST:
-            return state.map(post =>
-                (post.id === action.id)
-                    ? { ...post, deleted: true }
-                    : post
-            )
+            return Object.assign({}, state, {
+                posts: state.posts.filter(p => p.id !== action.post.id),
+                selectedIndex: -1
+            })
         case EDIT_POST:
-            return state.map(post =>
-                (post.id === action.id)
-                    ? { ...post, title: action.title, body: action.body, author: action.author }
-                    : post
-            )
+            console.log('>>>>>>>', action.post)
+            return Object.assign({}, state, {
+                posts: state.posts.map((post) => {
+                    if (post.id === action.post.id) {
+                        return { ...action.post }
+                    }
+                    return post
+                })
+            })
         case VOTE_POST:
             return Object.assign({}, state, {
                 posts: state.posts.map((post) => {

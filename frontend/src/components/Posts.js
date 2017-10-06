@@ -10,13 +10,21 @@ class Posts extends Component {
     static propTypes = {
         posts: PropTypes.array.isRequired,
         category: PropTypes.string.isRequired,
-        onVote: PropTypes.func.isRequired
+        onVote: PropTypes.func.isRequired,
+        onDeletePost: PropTypes.func.isRequired
     }
 
     componentWillUpdate(nextProps, nextState) {
         console.log('nextProps', nextProps)
         console.log('nextState', nextState)
-      }
+    }
+
+    deletePost(id) {
+        var c = window.confirm("Are you sure you want to delete the post?")
+        if (c === true) {
+            this.props.onDeletePost(id)
+        }
+    }
 
     render() {
         return (
@@ -47,7 +55,7 @@ class Posts extends Component {
                             }}><img src={votedown} height="20" width="20" alt="Click if dislike the Post" title="Click if dislike the Post" /></button>&nbsp;&nbsp;
                             <button onClick={e => {
                                 e.preventDefault()
-                                this.props.onVote(post.id, 'downVote')
+                                this.deletePost(post.id)
                             }}><img src={deleteImg} height="20" width="20" alt="Click to delete the Post" title="Click to delete the Post" /></button>
                         </td>
                     </tr>)}
