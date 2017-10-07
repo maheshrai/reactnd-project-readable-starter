@@ -38,7 +38,8 @@ class Post extends Component {
             voteScore: 1,
             editingMode: this.props.id !== 'new',
             redirectHome: false,
-            error: false
+            error: false,
+            timestamp: new Date().getTime()
         }
 
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -93,7 +94,8 @@ class Post extends Component {
                 title: nextProps.post.title,
                 body: nextProps.post.body,
                 author: nextProps.post.author,
-                voteScore: nextProps.post.voteScore
+                voteScore: nextProps.post.voteScore,
+                timestamp: nextProps.post.timestamp
             })
         } else {
             this.setState({
@@ -134,6 +136,7 @@ class Post extends Component {
                 </span>
                 <h4>Category: <NavLink to={'/' + this.props.category}>{this.props.category}</NavLink></h4>
                 {this.state.editingMode && <h4>Vote Score: {this.state.voteScore}</h4>}
+                {this.state.editingMode && <h4>Timestamp: {new Date(this.state.timestamp).toLocaleString()}</h4>}
                 {this.state.error && <span className="error">Title, Body and Author are required</span>}
                 <form onSubmit={this.handleSubmit}>
                     <label>Title:
