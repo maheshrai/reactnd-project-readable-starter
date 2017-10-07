@@ -40,6 +40,17 @@ export const fetchPosts = () => dispatch => (
         .then(posts => dispatch(listPosts(posts)))
 )
 
+export const getPost = postId => ({
+    type: GET_POST,
+    postId
+})
+
+export const fetchPost = (postId) => dispatch => (
+    ReadableAPI
+        .getPost(postId)
+        .then(post => dispatch(getPost(post.id)))
+)
+
 export const addPost = (post) => {
     return {
         type: ADD_POST,
@@ -60,9 +71,9 @@ export const editPost = (post) => {
     }
 }
 
-export const updatePost = (id, title, body) => dispatch => (
+export const updatePost = (id, title, body, author) => dispatch => (
     ReadableAPI
-        .updatePost(id, title, body)
+        .updatePost(id, title, body, author)
         .then(p => dispatch(editPost(p)))
 )
 
@@ -104,42 +115,44 @@ export const fetchComments = (postId) => dispatch => (
         .then(comments => dispatch(listComments(comments)))
 )
 
-export const getPost = postId => ({
-    type: GET_POST,
-    postId
-})
-
-export const fetchPost = (postId) => dispatch => (
-    ReadableAPI
-        .getPost(postId)
-        .then(post => dispatch(getPost(post.id)))
-)
-
-export const addComment = (parentId, body, author) => {
+export const addComment = (comment) => {
     return {
         type: ADD_COMMENT,
-        parentId,
-        body,
-        author
+        comment
     }
 }
 
-export const editComment = (id, title, body, author) => {
+export const addNewComment = (comment) => dispatch => (
+    ReadableAPI
+        .addComment(comment)
+        .then(c => dispatch(addComment(c)))
+)
+
+export const editComment = (comment) => {
     return {
         type: EDIT_COMMENT,
-        id,
-        title,
-        body,
-        author
+        comment
     }
 }
 
-export const deleteComment = (id) => {
+export const updateComment = (id, body, author) => dispatch => (
+    ReadableAPI
+        .updateComment(id, body, author)
+        .then(c => dispatch(editComment(c)))
+)
+
+export const deleteComment = (comment) => {
     return {
         type: DELETE_COMMENT,
-        id
+        comment
     }
 }
+
+export const delComment = (id) => dispatch => (
+    ReadableAPI
+        .deleteComment(id)
+        .then(c => dispatch(deleteComment(c)))
+)
 
 export const voteComment = (id, vote) => {
     return {

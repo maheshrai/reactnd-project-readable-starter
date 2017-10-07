@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
-import addImg from '../add.svg';
+import addImg from '../img/add.svg';
 
 class Categories extends Component {
 

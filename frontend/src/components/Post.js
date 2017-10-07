@@ -1,10 +1,18 @@
 import React, { Component } from 'react'
+import { NavLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import voteup from '../voteup.svg'
-import votedown from '../votedown.svg'
+import voteup from '../img/voteup.svg'
+import votedown from '../img/votedown.svg'
+import deleteImg from '../img/delete.svg'
+import saveImg from '../img/save.svg'
+import home from '../img/home.svg'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router'
-import { updatePostVote, fetchComments, fetchPost, updateCommentVote, addNewPost, updatePost } from '../actions'
+import {
+    updatePostVote, fetchComments, fetchPost,
+    updateCommentVote, addNewPost, updatePost,
+    addNewComment, delComment, updateComment
+} from '../actions'
 import Comments from './Comments'
 const uuidv4 = require('uuid/v4')
 class Post extends Component {
@@ -29,7 +37,8 @@ class Post extends Component {
             author: '',
             voteScore: 1,
             editingMode: this.props.id !== 'new',
-            redirectHome: false
+            redirectHome: false,
+            error: false
         }
 
         this.handleInputChange = this.handleInputChange.bind(this)
@@ -53,14 +62,14 @@ class Post extends Component {
             var savedPost = { ...this.state, timestamp: new Date().getTime() }
             delete savedPost.editingMode
             this.props.onAddPost(savedPost)
-            this.setState({ editingMode: true })
+            this.setState({ editingMode: true, error: false })
         } else {
-            alert('Title, Body and Author are required')
+            this.setState({ error: true })
         }
     }
 
     updatePost() {
-        this.props.onUpdatePost(this.state.id, this.state.title, this.state.body)
+        this.props.onUpdatePost(this.state.id, this.state.title, this.state.body, this.state.author)
     }
 
     deletePost() {
@@ -80,13 +89,29 @@ class Post extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.post) {
-            this.setState({ title: nextProps.post.title, body: nextProps.post.body, author: nextProps.post.author })
+            this.setState({
+                title: nextProps.post.title,
+                body: nextProps.post.body,
+                author: nextProps.post.author,
+                voteScore: nextProps.post.voteScore
+            })
+        } else {
+            this.setState({
+                title: '',
+                body: '',
+                author: '',
+                voteScore: 1
+            })
         }
     }
 
     render() {
         return (
             <div>
+                <br />
+                <NavLink to='/'>
+                    <img src={home} height="20" width="20" alt="Home" title="Home" />
+                </NavLink>
                 <br />
                 <span><b>Post</b>&nbsp;&nbsp;
                 {this.state.editingMode && <button onClick={e => {
@@ -96,9 +121,20 @@ class Post extends Component {
                 {this.state.editingMode && <button onClick={e => {
                         e.preventDefault()
                         this.props.onPostVote(this.props.id, 'downVote')
-                    }}><img src={votedown} height="20" width="20" alt="Click if dislike the Post" /></button>}
+                    }}><img src={votedown} height="20" width="20" alt="Click if dislike the Post" /></button>}&nbsp;&nbsp;
+                    {this.state.editingMode && <button onClick={e => {
+                        e.preventDefault()
+                        this.updatePost()
+                    }}><img src={saveImg} height="20" width="20" alt="Click to save the Post" /></button>}
+                    &nbsp;&nbsp;
+                    {this.state.editingMode && <button onClick={e => {
+                        e.preventDefault()
+                        this.deletePost()
+                    }}><img src={deleteImg} height="20" width="20" alt="Click to delete the Post" /></button>}
                 </span>
-                <h4>Category: {this.props.category}</h4>
+                <h4>Category: <NavLink to={'/' + this.props.category}>{this.props.category}</NavLink></h4>
+                {this.state.editingMode && <h4>Vote Score: {this.state.voteScore}</h4>}
+                {this.state.error && <span className="error">Title, Body and Author are required</span>}
                 <form onSubmit={this.handleSubmit}>
                     <label>Title:
                     <input type="text" id="title" name="title" placeholder="Title"
@@ -112,14 +148,15 @@ class Post extends Component {
                     <input type="text" id="author" name="author" placeholder="Author"
                             value={this.state.author} onChange={this.handleInputChange} />
                     </label>
-                    {this.state.editingMode && <label>Vote Score:
-                    <input type="text" id="voteScore" name="voteScore" readOnly value={this.state.voteScore} />
-                    </label>}
-                    <input type="submit" value="Save" />
-                    {this.state.editingMode && <input type="button" value="Delete" onClick={this.deletePost} />}
+                    {!this.state.editingMode && <input type="submit" value="Save" />}
                 </form>
                 {this.state.redirectHome && (<Redirect to='/' />)}
-                {this.state.editingMode && <Comments comments={this.props.comments} onCommentVote={this.props.onCommentVote} />}
+                {this.state.editingMode && <Comments parentId={this.state.id}
+                    comments={this.props.comments}
+                    onCommentVote={this.props.onCommentVote}
+                    onAddComment={this.props.onAddComment}
+                    onDeleteComment={this.props.onDeleteComment}
+                    onUpdateComment={this.props.onUpdateComment} />}
             </div>
         )
     }
@@ -146,8 +183,20 @@ const mapDispatchToProps = dispatch => ({
     onAddPost: post => {
         dispatch(addNewPost(post))
     },
-    onUpdatePost: (id, title, body) => {
-        dispatch(updatePost(id, title, body))
+    onUpdatePost: (id, title, body, author) => {
+        dispatch(updatePost(id, title, body, author))
+    },
+    onAddComment: comment => {
+        dispatch(addNewComment(comment))
+    },
+    onDeleteComment: id => {
+        var c = window.confirm("Delete the comment?")
+        if (c === true) {
+            dispatch(delComment(id))
+        }
+    },
+    onUpdateComment: (id, body, author) => {
+        dispatch(updateComment(id, body, author))
     }
 })
 

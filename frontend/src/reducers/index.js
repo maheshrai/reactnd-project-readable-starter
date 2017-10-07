@@ -20,8 +20,6 @@ import {
     VOTE_COMMENT
 } from '../actions'
 
-const uuidv4 = require('uuid/v4')
-
 const category = (state = {}, action) => {
     switch (action.type) {
         case LIST_CATEGORIES:
@@ -54,7 +52,6 @@ const post = (state = {}, action) => {
                 selectedIndex: -1
             })
         case EDIT_POST:
-            console.log('>>>>>>>', action.post)
             return Object.assign({}, state, {
                 posts: state.posts.map((post) => {
                     if (post.id === action.post.id) {
@@ -86,31 +83,22 @@ const comment = (state = {}, action) => {
                 comments: action.comments,
             })
         case ADD_COMMENT:
-            return [
-                ...state,
-                {
-                    id: uuidv4(),
-                    parentId: action.parentId,
-                    timestamp: Date.now(),
-                    body: action.body,
-                    author: action.author,
-                    voteScore: 1,
-                    deleted: false,
-                    parentDeleted: false
-                }
-            ]
+            return Object.assign({}, state, {
+                comments: [...state.comments, action.comment]
+            })
         case DELETE_COMMENT:
-            return state.map(comment =>
-                (comment.id === action.id)
-                    ? { ...comment, deleted: true }
-                    : comment
-            )
+            return Object.assign({}, state, {
+                comments: state.comments.filter(c => c.id !== action.comment.id)
+            })
         case EDIT_COMMENT:
-            return state.map(comment =>
-                (comment.id === action.id)
-                    ? { ...comment, body: action.body, author: action.author }
-                    : comment
-            )
+            return Object.assign({}, state, {
+                comments: state.comments.map((comment) => {
+                    if (comment.id === action.comment.id) {
+                        return { ...action.comment }
+                    }
+                    return comment
+                })
+            })
         case VOTE_COMMENT:
             return Object.assign({}, state, {
                 comments: state.comments.map((comment) => {

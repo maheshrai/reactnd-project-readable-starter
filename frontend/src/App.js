@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import Categories from './components/Categories'
 import Posts from './components/Posts'
 import Post from './components/Post'
+import home from './img/home.svg'
 import './App.css';
 
 import { updatePostVote, fetchComments, delPost } from './actions'
-
-import FaArrowLeft from 'react-icons/lib/fa/arrow-left';
 
 class App extends Component {
 
@@ -20,7 +20,11 @@ class App extends Component {
         </div>
         <Route exact path="/:category" render={({ history, match }) => (
           <div>
-            <h1><FaArrowLeft /></h1>
+            <br/>
+            <NavLink to='/'>
+              <img src={home} height="20" width="20" alt="Home" title="Home" />
+            </NavLink>
+            <h4>Category: {match.params.category}</h4>
             <h3>Posts</h3>
             <Posts posts={this.props.posts} category={match.params.category} onVote={this.props.onVote} />
           </div>

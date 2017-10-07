@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import voteup from '../voteup.svg';
-import votedown from '../votedown.svg';
-import deleteImg from '../delete.svg';
+import voteup from '../img/voteup.svg'
+import votedown from '../img/votedown.svg'
+import deleteImg from '../img/delete.svg'
 import { NavLink } from 'react-router-dom'
 
 class Posts extends Component {
