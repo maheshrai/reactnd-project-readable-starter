@@ -33,7 +33,7 @@ Launch the browser and navigate to http://localhost:3000/ to get to the app
 
 ### Credits
 
-VMWare Clarity icons were used in the application (https://vmware.github.io/clarity/icons/clarity-icons)
-CSS Stylings were borrowed from CSS Tutorial of W3Schools (https://www.w3schools.com/css)
+- Icons used in the application were downloaded from Clarity (https://vmware.github.io/clarity/icons/clarity-icons)
+- CSS Stylings were borrowed from CSS Tutorial of W3Schools (https://www.w3schools.com/css)
 
 
