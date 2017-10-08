@@ -56,7 +56,7 @@ const post = (state = {}, action) => {
             return Object.assign({}, state, {
                 posts: state.posts.map((post) => {
                     if (post.id === action.post.id) {
-                        return { ...action.post }
+                        return { ...action.post, commentCount: post.commentCount }
                     }
                     return post
                 })

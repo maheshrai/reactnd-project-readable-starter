@@ -51,7 +51,6 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   categories: state.category.categories ? state.category.categories : [],
-  posts: state.post.posts ? state.post.posts : [],
   posts: state.post.posts ? state.post.posts : []
 })
 

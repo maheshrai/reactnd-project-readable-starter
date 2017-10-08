@@ -82,18 +82,8 @@ class Post extends Component {
     }
 
     componentDidMount() {
-        if (this.state.editingMode) {
-            this.props.loadPost(this.props.id)
-            this.props.loadPostComments(this.props.id)
-        } else {
-            this.setState({
-                title: '',
-                body: '',
-                author: '',
-                id: uuidv4(),
-                voteScore: 1
-            })
-        }
+        this.props.loadPost(this.props.id)
+        this.props.loadPostComments(this.props.id)
     }
 
     componentWillReceiveProps(nextProps) {

@@ -50,7 +50,7 @@ export const getPost = postId => ({
 })
 
 export const fetchPost = (postId) => dispatch => (
-    ReadableAPI
+    postId === 'new' ? dispatch(getPost(postId)) : ReadableAPI
         .getPost(postId)
         .then(post => dispatch(getPost(post.id)))
 )
