@@ -11,7 +11,6 @@ class Posts extends Component {
         super(props)
 
         this.state = {
-            posts: [],
             sort: '',
             sortField: ''
         }
@@ -24,6 +23,10 @@ class Posts extends Component {
         category: PropTypes.string.isRequired,
         onVote: PropTypes.func.isRequired,
         onDeletePost: PropTypes.func.isRequired
+    }
+
+    componentDidMount() {
+        this.setState({ posts: this.findPostsByCategory() })
     }
 
     componentWillReceiveProps(nextProps) {
@@ -40,7 +43,13 @@ class Posts extends Component {
     sort(field) {
         var sposts, sortby = 'asc'
         if (field === this.state.sortField) sortby = this.state.sortby === 'asc' ? 'desc' : 'asc'
-        sposts = this.state.posts.sort((a, b) => sortby === 'asc' ? a[field] > b[field] : a[field] < b[field])
+        if (field === 'title' || field === 'author') {
+            sposts = this.props.posts.sort((a, b) => sortby === 'asc' ?
+                a[field].toLowerCase() > b[field].toLowerCase() :
+                a[field].toLowerCase() < b[field].toLowerCase())
+        } else {
+            sposts = this.props.posts.sort((a, b) => sortby === 'asc' ? a[field] > b[field] : a[field] < b[field])
+        }
         this.setState({ posts: sposts, sortField: field, sortby: sortby })
     }
 
@@ -52,17 +61,17 @@ class Posts extends Component {
                         <th><a href="#" onClick={() => { this.sort('title') }}>Title</a></th>
                         <th><a href="#" onClick={() => { this.sort('author') }}>Author</a></th>
                         <th><a href="#" onClick={() => { this.sort('timestamp') }}>Timestamp</a></th>
-                        <th><a href="#" onClick={() => { this.sort('comments') }}>Number of Comments</a></th>
+                        <th><a href="#" onClick={() => { this.sort('commentCount') }}>Number of Comments</a></th>
                         <th><a href="#" onClick={() => { this.sort('voteScore') }}>Vote Score</a></th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.posts.map((post, i) => <tr key={i}>
+                    {this.findPostsByCategory().map((post, i) => <tr key={i}>
                         <td><NavLink to={'/' + post.category + '/' + post.id}>{post.title}</NavLink></td>
                         <td>{post.author}</td>
                         <td>{new Date(post.timestamp).toLocaleString()}</td>
-                        <td>{post.voteScore}</td>
+                        <td>{post.commentCount}</td>
                         <td>{post.voteScore}</td>
                         <td>
                             <button onClick={e => {

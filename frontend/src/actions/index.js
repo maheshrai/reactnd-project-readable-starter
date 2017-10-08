@@ -10,6 +10,7 @@ export const ADD_POST = 'ADD_POST'
 export const DELETE_POST = 'DELETE_POST'
 export const EDIT_POST = 'EDIT_POST'
 export const VOTE_POST = 'VOTE_POST'
+export const COMMENT_COUNT = 'COMMENT_COUNT'
 
 // Comment Actions
 export const LIST_COMMENTS = 'LIST_COMMENTS'
@@ -37,7 +38,10 @@ export const listPosts = posts => ({
 export const fetchPosts = () => dispatch => (
     ReadableAPI
         .getAllPosts()
-        .then(posts => dispatch(listPosts(posts)))
+        .then(posts => {
+            var postswithcnt = posts.map((p) => Object.assign({}, p, { commentCount: 0 }))
+            dispatch(listPosts(postswithcnt))
+        })
 )
 
 export const getPost = postId => ({
@@ -61,7 +65,7 @@ export const addPost = (post) => {
 export const addNewPost = (post) => dispatch => (
     ReadableAPI
         .addPost(post)
-        .then(p => dispatch(addPost(p)))
+        .then(p => dispatch(addPost(Object.assign({}, p, { commentCount: 0 }))))
 )
 
 export const editPost = (post) => {
@@ -113,6 +117,25 @@ export const fetchComments = (postId) => dispatch => (
     ReadableAPI
         .getPostComments(postId)
         .then(comments => dispatch(listComments(comments)))
+)
+
+export const updateCommentCount = (id, commentCount, actionType) => ({
+    type: COMMENT_COUNT,
+    id,
+    commentCount,
+    actionType
+})
+
+export const fetchAllComments = () => dispatch => (
+    ReadableAPI
+        .getAllPosts()
+        .then(posts => {
+            posts.forEach((p) => {
+                ReadableAPI
+                    .getPostComments(p.id)
+                    .then(comments => dispatch(updateCommentCount(p.id, comments ? comments.length : 0, 'total')))
+            })
+        })
 )
 
 export const addComment = (comment) => {

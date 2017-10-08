@@ -116,7 +116,7 @@ class Comments extends Component {
                     }}><img src={editImg} height="20" width="20" alt="Click to edit the Comment" title="Edit" /></button>&nbsp;&nbsp;
                     <button onClick={e => {
                         e.preventDefault()
-                        this.props.onDeleteComment(comment.id)
+                        this.props.onDeleteComment(comment)
                     }}><img src={deleteImg} height="20" width="20" alt="Click to delete the Comment" title="Delete" /></button>
                     <br /><br />
                     <span>{comment.body}</span>

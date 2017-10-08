@@ -11,7 +11,7 @@ import { Redirect } from 'react-router'
 import {
     updatePostVote, fetchComments, fetchPost,
     updateCommentVote, addNewPost, updatePost,
-    addNewComment, delComment, updateComment
+    addNewComment, delComment, updateComment, updateCommentCount
 } from '../actions'
 import Comments from './Comments'
 const uuidv4 = require('uuid/v4')
@@ -85,6 +85,14 @@ class Post extends Component {
         if (this.state.editingMode) {
             this.props.loadPost(this.props.id)
             this.props.loadPostComments(this.props.id)
+        } else {
+            this.setState({
+                title: '',
+                body: '',
+                author: '',
+                id: uuidv4(),
+                voteScore: 1
+            })
         }
     }
 
@@ -96,13 +104,6 @@ class Post extends Component {
                 author: nextProps.post.author,
                 voteScore: nextProps.post.voteScore,
                 timestamp: nextProps.post.timestamp
-            })
-        } else {
-            this.setState({
-                title: '',
-                body: '',
-                author: '',
-                voteScore: 1
             })
         }
     }
@@ -191,11 +192,13 @@ const mapDispatchToProps = dispatch => ({
     },
     onAddComment: comment => {
         dispatch(addNewComment(comment))
+        dispatch(updateCommentCount(comment.parentId, 1, 'add'))
     },
-    onDeleteComment: id => {
+    onDeleteComment: comment => {
         var c = window.confirm("Delete the comment?")
         if (c === true) {
-            dispatch(delComment(id))
+            dispatch(delComment(comment.id))
+            dispatch(updateCommentCount(comment.parentId, 1, 'del'))
         }
     },
     onUpdateComment: (id, body, author) => {

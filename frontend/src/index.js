@@ -9,7 +9,7 @@ import logger from 'redux-logger'
 import thunk from 'redux-thunk'
 
 import './index.css'
-import { fetchCategories, fetchPosts, fetchComments } from './actions'
+import { fetchCategories, fetchPosts, fetchAllComments } from './actions'
 import App from './App';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
@@ -22,7 +22,7 @@ const store = createStore(
 
 store.dispatch(fetchPosts())
 store.dispatch(fetchCategories())
-store.dispatch(fetchComments())
+store.dispatch(fetchAllComments())
 
 ReactDOM.render(
     <Provider store={store}>

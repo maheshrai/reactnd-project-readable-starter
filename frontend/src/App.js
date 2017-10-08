@@ -26,7 +26,7 @@ class App extends Component {
             </NavLink>
             <h4>Category: {match.params.category}</h4>
             <h3>Posts</h3>
-            <Posts posts={this.props.posts} category={match.params.category} onVote={this.props.onVote} />
+            <Posts posts={this.props.posts} category={match.params.category} onVote={this.props.onVote} onDeletePost={this.props.onDeletePost} />
           </div>
         )} />
         <Route exact path="/:category/:post_id" render={({ history, match }) => (
@@ -51,6 +51,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   categories: state.category.categories ? state.category.categories : [],
+  posts: state.post.posts ? state.post.posts : [],
   posts: state.post.posts ? state.post.posts : []
 })
 

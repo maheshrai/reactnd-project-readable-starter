@@ -11,6 +11,7 @@ import {
     DELETE_POST,
     EDIT_POST,
     VOTE_POST,
+    COMMENT_COUNT,
 
     // Comment actions
     LIST_COMMENTS,
@@ -60,6 +61,19 @@ const post = (state = {}, action) => {
                     return post
                 })
             })
+        case COMMENT_COUNT:
+            return Object.assign({}, state, {
+                posts: state.posts.map((post) => {
+                    if (post.id === action.id) {
+                        return {
+                            ...post, commentCount:
+                            (action.actionType === 'add' ? post.commentCount + 1 :
+                                (action.actionType === 'del' ? post.commentCount - 1 : action.commentCount))
+                        }
+                    }
+                    return post
+                })
+            })
         case VOTE_POST:
             return Object.assign({}, state, {
                 posts: state.posts.map((post) => {
@@ -84,7 +98,7 @@ const comment = (state = {}, action) => {
             })
         case ADD_COMMENT:
             return Object.assign({}, state, {
-                comments: [...state.comments, action.comment]
+                comments: state.comments ? [...state.comments, action.comment] : [action.comment]
             })
         case DELETE_COMMENT:
             return Object.assign({}, state, {
