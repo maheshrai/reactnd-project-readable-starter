@@ -55,14 +55,14 @@ class Posts extends Component {
 
     render() {
         return (
-            <table>
+            <table id="posts">
                 <thead>
                     <tr>
-                        <th><a href="#" onClick={() => { this.sort('title') }}>Title</a></th>
-                        <th><a href="#" onClick={() => { this.sort('author') }}>Author</a></th>
-                        <th><a href="#" onClick={() => { this.sort('timestamp') }}>Timestamp</a></th>
-                        <th><a href="#" onClick={() => { this.sort('commentCount') }}>Number of Comments</a></th>
-                        <th><a href="#" onClick={() => { this.sort('voteScore') }}>Vote Score</a></th>
+                        <th><a href="#posts" onClick={() => { this.sort('title') }}>Title</a></th>
+                        <th><a href="#posts" onClick={() => { this.sort('author') }}>Author</a></th>
+                        <th><a href="#posts" onClick={() => { this.sort('timestamp') }}>Timestamp</a></th>
+                        <th><a href="#posts" onClick={() => { this.sort('commentCount') }}>Number of Comments</a></th>
+                        <th><a href="#posts" onClick={() => { this.sort('voteScore') }}>Vote Score</a></th>
                         <th>Actions</th>
                     </tr>
                 </thead>
